@@ -26,6 +26,8 @@ pub(super) fn parse_endpoint(s: &str) -> Result<(u8, u32, String), SignError> {
         "reply" => 2,
         _ => return Err(SignError::EndpointSpec(s.into())),
     };
-    let port: u32 = parts[1].parse().map_err(|_| SignError::EndpointSpec(s.into()))?;
+    let port: u32 = parts[1]
+        .parse()
+        .map_err(|_| SignError::EndpointSpec(s.into()))?;
     Ok((kind, port, parts[2].to_string()))
 }

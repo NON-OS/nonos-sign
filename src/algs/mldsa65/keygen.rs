@@ -26,9 +26,13 @@ pub fn from_seed(_seed: &[u8]) -> Result<KeyPair, SignError> {
 pub fn random() -> Result<KeyPair, SignError> {
     let mut pk = vec![0u8; ffi::PUBLIC_KEY_BYTES];
     let mut sk = vec![0u8; ffi::SECRET_KEY_BYTES];
-    let rc = unsafe { ffi::PQCLEAN_MLDSA65_CLEAN_crypto_sign_keypair(pk.as_mut_ptr(), sk.as_mut_ptr()) };
+    let rc =
+        unsafe { ffi::PQCLEAN_MLDSA65_CLEAN_crypto_sign_keypair(pk.as_mut_ptr(), sk.as_mut_ptr()) };
     if rc != 0 {
         return Err(SignError::PqcleanFailed("mldsa65 keypair"));
     }
-    Ok(KeyPair { pubkey: pk, seed: sk })
+    Ok(KeyPair {
+        pubkey: pk,
+        seed: sk,
+    })
 }

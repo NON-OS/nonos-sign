@@ -29,10 +29,14 @@ pub fn verify_cert(
     if cert.trust_anchor_epoch < policy.epoch {
         return Err(SignError::VerifyEpochStale);
     }
-    if policy.revoked_cert_serials.iter().any(|s| *s == cert.cert_serial) {
+    if policy.revoked_cert_serials.contains(&cert.cert_serial) {
         return Err(SignError::VerifyCertRevoked);
     }
-    if policy.revoked_nonos_ids.iter().any(|id| id == &cert.nonos_id) {
+    if policy
+        .revoked_nonos_ids
+        .iter()
+        .any(|id| id == &cert.nonos_id)
+    {
         return Err(SignError::VerifyNonosIdRevoked);
     }
     if let Some(ts) = now_ms {

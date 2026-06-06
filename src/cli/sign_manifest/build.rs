@@ -21,12 +21,19 @@ use nonos_capsule_sign::wire::capsule_manifest::{
 
 use super::args::Args;
 
-pub(super) fn inputs(a: &Args, cert_id: [u8; 32], payload_hash: [u8; 32]) -> Result<CapsuleManifestInputs, SignError> {
+pub(super) fn inputs(
+    a: &Args,
+    cert_id: [u8; 32],
+    payload_hash: [u8; 32],
+) -> Result<CapsuleManifestInputs, SignError> {
     let endpoints = a
         .endpoints
         .iter()
         .map(|(k, p, n)| EndpointInput {
-            kind: match *k { 2 => EndpointKind::Reply, _ => EndpointKind::Service },
+            kind: match *k {
+                2 => EndpointKind::Reply,
+                _ => EndpointKind::Service,
+            },
             port: *p,
             name: n.clone(),
         })
@@ -34,7 +41,11 @@ pub(super) fn inputs(a: &Args, cert_id: [u8; 32], payload_hash: [u8; 32]) -> Res
     Ok(CapsuleManifestInputs {
         nonos_id_cert_id: cert_id,
         namespace: a.namespace.clone(),
-        version: VersionInput { major: a.version.0, minor: a.version.1, patch: a.version.2 },
+        version: VersionInput {
+            major: a.version.0,
+            minor: a.version.1,
+            patch: a.version.2,
+        },
         target_triple: a.target.clone(),
         payload_hash,
         required_caps: a.required_caps,

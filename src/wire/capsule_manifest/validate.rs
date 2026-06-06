@@ -20,16 +20,14 @@ use crate::wire::constants::{
     MAX_TARGET_TRIPLE_LEN,
 };
 
-use super::inputs::{
-    CapsuleManifestInputs, EndpointInput, PublisherSignatureInput,
-};
+use super::inputs::{CapsuleManifestInputs, EndpointInput, PublisherSignatureInput};
 
 pub(super) fn check_body(input: &CapsuleManifestInputs) -> Result<(), SignError> {
-    let n = input.namespace.as_bytes().len();
+    let n = input.namespace.len();
     if n == 0 || n > MAX_NAMESPACE_LEN {
         return Err(SignError::ManifestNamespaceLen(n));
     }
-    let t = input.target_triple.as_bytes().len();
+    let t = input.target_triple.len();
     if t == 0 || t > MAX_TARGET_TRIPLE_LEN {
         return Err(SignError::ManifestTargetTripleLen(t));
     }
@@ -51,7 +49,7 @@ pub(super) fn check_body(input: &CapsuleManifestInputs) -> Result<(), SignError>
 }
 
 fn check_endpoint(e: &EndpointInput) -> Result<(), SignError> {
-    let n = e.name.as_bytes().len();
+    let n = e.name.len();
     if n == 0 || n > MAX_ENDPOINT_NAME_LEN {
         return Err(SignError::ManifestEndpointNameLen(n));
     }

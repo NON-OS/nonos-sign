@@ -27,8 +27,16 @@ fn sigs_both(body: &[u8], b: &Bundle) -> Vec<PublisherSignatureInput> {
     let sig_ed = sign_with(AlgId::Ed25519, &b.pub_seed_ed, body).unwrap();
     let sig_dl = sign_with(AlgId::MlDsa65, &b.pub_seed_dl, body).unwrap();
     vec![
-        PublisherSignatureInput { alg: AlgId::Ed25519, key_id: b.pub_key_id_ed, sig: sig_ed },
-        PublisherSignatureInput { alg: AlgId::MlDsa65, key_id: b.pub_key_id_dl, sig: sig_dl },
+        PublisherSignatureInput {
+            alg: AlgId::Ed25519,
+            key_id: b.pub_key_id_ed,
+            sig: sig_ed,
+        },
+        PublisherSignatureInput {
+            alg: AlgId::MlDsa65,
+            key_id: b.pub_key_id_dl,
+            sig: sig_dl,
+        },
     ]
 }
 

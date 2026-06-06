@@ -28,13 +28,13 @@ pub(super) fn check_body(input: &NonosIdCertInputs) -> Result<(), SignError> {
         return Err(SignError::CertNamespaceGlobCount(g.len()));
     }
     for s in g {
-        let n = s.as_bytes().len();
+        let n = s.len();
         if n == 0 || n > MAX_NAMESPACE_GLOB_LEN {
             return Err(SignError::CertNamespaceGlobLen(n));
         }
     }
-    if input.metadata.as_bytes().len() > MAX_METADATA_LEN {
-        return Err(SignError::CertMetadataLen(input.metadata.as_bytes().len()));
+    if input.metadata.len() > MAX_METADATA_LEN {
+        return Err(SignError::CertMetadataLen(input.metadata.len()));
     }
     if input.valid_from_ms == 0 || input.valid_until_ms <= input.valid_from_ms {
         return Err(SignError::CertValidWindow {

@@ -23,7 +23,9 @@ use crate::wire::constants::SCHEMA_CAPSULE_MANIFEST;
 pub fn decode_manifest(bytes: &[u8]) -> Result<DecodedManifest, SignError> {
     let mut c = Cursor::new(bytes);
     if c.u16_be()? != SCHEMA_CAPSULE_MANIFEST {
-        return Err(SignError::KeyFileShape("manifest schema_version mismatch".into()));
+        return Err(SignError::KeyFileShape(
+            "manifest schema_version mismatch".into(),
+        ));
     }
     let nonos_id_cert_id = c.array::<32>()?;
     let nlen = c.u8()? as usize;

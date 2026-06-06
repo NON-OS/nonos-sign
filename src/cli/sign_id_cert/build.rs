@@ -34,7 +34,11 @@ pub(super) fn inputs(a: &Args) -> Result<NonosIdCertInputs, SignError> {
             )));
         }
         let key_id = derive_publisher_key_id(mat.alg, &mat.bytes);
-        publisher_keys.push(PublisherKeyInput { alg: mat.alg, key_id, pubkey: mat.bytes });
+        publisher_keys.push(PublisherKeyInput {
+            alg: mat.alg,
+            key_id,
+            pubkey: mat.bytes,
+        });
     }
     Ok(NonosIdCertInputs {
         cert_serial: a.serial,

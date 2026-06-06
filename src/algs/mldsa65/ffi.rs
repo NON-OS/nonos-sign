@@ -19,10 +19,7 @@ pub const SECRET_KEY_BYTES: usize = 4032;
 pub const SIGNATURE_BYTES: usize = 3309;
 
 extern "C" {
-    pub fn PQCLEAN_MLDSA65_CLEAN_crypto_sign_keypair(
-        pk: *mut u8,
-        sk: *mut u8,
-    ) -> core::ffi::c_int;
+    pub fn PQCLEAN_MLDSA65_CLEAN_crypto_sign_keypair(pk: *mut u8, sk: *mut u8) -> core::ffi::c_int;
 
     pub fn PQCLEAN_MLDSA65_CLEAN_crypto_sign_signature(
         sig: *mut u8,

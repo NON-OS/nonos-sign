@@ -32,12 +32,19 @@ pub fn run(av: &[String]) -> Result<(), SignError> {
     let dpol = decode_trust_anchor_policy(&pol_bytes)?;
     let dcert = decode_cert(&cert_bytes)?;
     verify_cert(&dcert, &cert_bytes, &dpol, REQUIRED, Some(now_ms))?;
-    println!("cert {} verifies under policy {} at now_ms={}",
-        cert_p.display(), pol_p.display(), now_ms);
+    println!(
+        "cert {} verifies under policy {} at now_ms={}",
+        cert_p.display(),
+        pol_p.display(),
+        now_ms
+    );
     println!("  cert_serial            {}", dcert.cert_serial);
     println!("  trust_anchor_epoch     {}", dcert.trust_anchor_epoch);
     println!("  publisher keys         {}", dcert.publisher_keys.len());
-    println!("  trust-anchor sigs      {}", dcert.trust_anchor_signatures.len());
+    println!(
+        "  trust-anchor sigs      {}",
+        dcert.trust_anchor_signatures.len()
+    );
     Ok(())
 }
 
@@ -50,14 +57,26 @@ fn parse(av: &[String]) -> Result<(PathBuf, PathBuf, u64), SignError> {
         let n = |k: &str| SignError::Usage(format!("verify-cert: {}", k));
         let v = |k: &str| av.get(i + 1).ok_or_else(|| n(k));
         match av[i].as_str() {
-            "--cert" => { cert = Some(PathBuf::from(v("--cert <path>")?)); i += 2; }
-            "--policy" => { policy = Some(PathBuf::from(v("--policy <path>")?)); i += 2; }
-            "--now-ms" => { now_ms = Some(v("--now-ms <n>")?.parse().map_err(|_| n("bad --now-ms"))?); i += 2; }
+            "--cert" => {
+                cert = Some(PathBuf::from(v("--cert <path>")?));
+                i += 2;
+            }
+            "--policy" => {
+                policy = Some(PathBuf::from(v("--policy <path>")?));
+                i += 2;
+            }
+            "--now-ms" => {
+                now_ms = Some(v("--now-ms <n>")?.parse().map_err(|_| n("bad --now-ms"))?);
+                i += 2;
+            }
             other => return Err(n(&format!("unknown `{}`", other))),
         }
     }
     let now = now_ms.unwrap_or_else(|| {
-        SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0)
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_millis() as u64)
+            .unwrap_or(0)
     });
     Ok((
         cert.ok_or_else(|| SignError::Usage("verify-cert: missing --cert".into()))?,

@@ -27,7 +27,11 @@ pub(super) fn try_fmt(e: &SignError, f: &mut fmt::Formatter<'_>) -> Option<fmt::
         }
         TaValidFromZero => write!(f, "trust-anchor key valid_from_ms must be != 0"),
         TaValidWindow { from, until } => {
-            write!(f, "trust-anchor key valid_until {} must be 0 or > valid_from {}", until, from)
+            write!(
+                f,
+                "trust-anchor key valid_until {} must be 0 or > valid_from {}",
+                until, from
+            )
         }
         TaRevokedCertSerialCount(n) => write!(f, "revoked cert serial count {} > 256", n),
         TaRevokedNonosIdCount(n) => write!(f, "revoked nonos_id count {} > 64", n),

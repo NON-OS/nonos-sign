@@ -39,22 +39,50 @@ pub(super) fn parse(args: &[String]) -> Result<Args, SignError> {
     while i < args.len() {
         let need = |k: &str| SignError::Usage(format!("mk-trust-policy: {}", k));
         match args[i].as_str() {
-            "--epoch" => { epoch = Some(parse_u64(args.get(i + 1).ok_or_else(|| need("--epoch <n>"))?)?); i += 2; }
+            "--epoch" => {
+                epoch = Some(parse_u64(
+                    args.get(i + 1).ok_or_else(|| need("--epoch <n>"))?,
+                )?);
+                i += 2;
+            }
             "--ta-pub" => {
-                let (a, p) = parse_alg_path(args.get(i + 1).ok_or_else(|| need("--ta-pub <a=p>"))?)?;
+                let (a, p) =
+                    parse_alg_path(args.get(i + 1).ok_or_else(|| need("--ta-pub <a=p>"))?)?;
                 ta_pubs.push((a, PathBuf::from(p)));
                 i += 2;
             }
-            "--valid-from-ms" => { vf = Some(parse_u64(args.get(i + 1).ok_or_else(|| need("--valid-from-ms <n>"))?)?); i += 2; }
-            "--valid-until-ms" => { vu = parse_u64(args.get(i + 1).ok_or_else(|| need("--valid-until-ms <n>"))?)?; i += 2; }
-            "--out" => { out = Some(PathBuf::from(args.get(i + 1).ok_or_else(|| need("--out <path>"))?)); i += 2; }
-            other => return Err(SignError::Usage(format!("mk-trust-policy: unknown `{}`", other))),
+            "--valid-from-ms" => {
+                vf = Some(parse_u64(
+                    args.get(i + 1).ok_or_else(|| need("--valid-from-ms <n>"))?,
+                )?);
+                i += 2;
+            }
+            "--valid-until-ms" => {
+                vu = parse_u64(
+                    args.get(i + 1)
+                        .ok_or_else(|| need("--valid-until-ms <n>"))?,
+                )?;
+                i += 2;
+            }
+            "--out" => {
+                out = Some(PathBuf::from(
+                    args.get(i + 1).ok_or_else(|| need("--out <path>"))?,
+                ));
+                i += 2;
+            }
+            other => {
+                return Err(SignError::Usage(format!(
+                    "mk-trust-policy: unknown `{}`",
+                    other
+                )))
+            }
         }
     }
     Ok(Args {
         epoch: epoch.ok_or_else(|| SignError::Usage("mk-trust-policy: missing --epoch".into()))?,
         ta_pubs,
-        valid_from_ms: vf.ok_or_else(|| SignError::Usage("mk-trust-policy: missing --valid-from-ms".into()))?,
+        valid_from_ms: vf
+            .ok_or_else(|| SignError::Usage("mk-trust-policy: missing --valid-from-ms".into()))?,
         valid_until_ms: vu,
         out: out.ok_or_else(|| SignError::Usage("mk-trust-policy: missing --out".into()))?,
     })

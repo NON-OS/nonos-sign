@@ -28,12 +28,7 @@ pub fn sign_with(alg: AlgId, seed: &[u8], msg: &[u8]) -> Result<Vec<u8>, SignErr
     }
 }
 
-pub fn verify_with(
-    alg: AlgId,
-    pubkey: &[u8],
-    msg: &[u8],
-    sig: &[u8],
-) -> Result<bool, SignError> {
+pub fn verify_with(alg: AlgId, pubkey: &[u8], msg: &[u8], sig: &[u8]) -> Result<bool, SignError> {
     match alg {
         AlgId::Ed25519 => <Ed25519 as Verifier>::verify(pubkey, msg, sig),
         AlgId::MlDsa65 => <MlDsa65 as Verifier>::verify(pubkey, msg, sig),

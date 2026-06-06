@@ -35,20 +35,30 @@ pub(super) fn pub_signatures(
         if mat.alg != *alg {
             return Err(SignError::KeyFileShape(format!(
                 "{}: declared {} but file is {}",
-                path.display(), alg.label(), mat.alg.label()
+                path.display(),
+                alg.label(),
+                mat.alg.label()
             )));
         }
         let key = cert
             .publisher_keys
             .iter()
             .find(|k| k.alg == mat.alg)
-            .ok_or_else(|| SignError::KeyFileShape(format!("cert has no {} publisher key", mat.alg.label())))?;
+            .ok_or_else(|| {
+                SignError::KeyFileShape(format!("cert has no {} publisher key", mat.alg.label()))
+            })?;
         let derived_id = derive_publisher_key_id(mat.alg, &key.pubkey);
         if derived_id != key.key_id {
-            return Err(SignError::KeyFileShape("cert key_id does not match its pubkey".into()));
+            return Err(SignError::KeyFileShape(
+                "cert key_id does not match its pubkey".into(),
+            ));
         }
         let sig = sign_with(mat.alg, &mat.bytes, body)?;
-        sigs.push(PublisherSignatureInput { alg: mat.alg, key_id: key.key_id, sig });
+        sigs.push(PublisherSignatureInput {
+            alg: mat.alg,
+            key_id: key.key_id,
+            sig,
+        });
     }
     Ok(sigs)
 }

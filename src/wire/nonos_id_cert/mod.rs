@@ -22,6 +22,4 @@ mod validate;
 
 pub use assemble::assemble;
 pub use body::encode_signed_region;
-pub use inputs::{
-    NonosIdCertInputs, PublisherKeyInput, TrustAnchorSignatureInput,
-};
+pub use inputs::{NonosIdCertInputs, PublisherKeyInput, TrustAnchorSignatureInput};

@@ -37,15 +37,22 @@ pub fn run(av: &[String]) -> Result<(), SignError> {
     verify_cert(&dcert, &cb, &dpol, REQUIRED, Some(now_ms))?;
     let dmf = decode_manifest(&mb)?;
     verify_manifest(&dmf, &mb, &dcert, &cb, &dpol, REQUIRED)?;
-    println!("manifest {} verifies under cert {} + policy {}",
-        mp.display(), cp.display(), pp.display());
+    println!(
+        "manifest {} verifies under cert {} + policy {}",
+        mp.display(),
+        cp.display(),
+        pp.display()
+    );
     println!("  namespace              {}", dmf.namespace);
     println!("  version                {}.x.x", dmf.version_major);
     println!("  target_triple          {}", dmf.target_triple);
     println!("  required_caps          0x{:016x}", dmf.required_caps);
     println!("  optional_caps          0x{:016x}", dmf.optional_caps);
     println!("  endpoints              {}", dmf.endpoints.len());
-    println!("  publisher signatures   {}", dmf.publisher_signatures.len());
+    println!(
+        "  publisher signatures   {}",
+        dmf.publisher_signatures.len()
+    );
     Ok(())
 }
 
@@ -56,15 +63,30 @@ fn parse(av: &[String]) -> Result<(PathBuf, PathBuf, PathBuf, u64), SignError> {
         let n = |k: &str| SignError::Usage(format!("verify-manifest: {}", k));
         let v = |k: &str| av.get(i + 1).ok_or_else(|| n(k));
         match av[i].as_str() {
-            "--manifest" => { mf = Some(PathBuf::from(v("--manifest <path>")?)); i += 2; }
-            "--cert" => { ce = Some(PathBuf::from(v("--cert <path>")?)); i += 2; }
-            "--policy" => { po = Some(PathBuf::from(v("--policy <path>")?)); i += 2; }
-            "--now-ms" => { now = Some(v("--now-ms <n>")?.parse().map_err(|_| n("bad --now-ms"))?); i += 2; }
+            "--manifest" => {
+                mf = Some(PathBuf::from(v("--manifest <path>")?));
+                i += 2;
+            }
+            "--cert" => {
+                ce = Some(PathBuf::from(v("--cert <path>")?));
+                i += 2;
+            }
+            "--policy" => {
+                po = Some(PathBuf::from(v("--policy <path>")?));
+                i += 2;
+            }
+            "--now-ms" => {
+                now = Some(v("--now-ms <n>")?.parse().map_err(|_| n("bad --now-ms"))?);
+                i += 2;
+            }
             other => return Err(n(&format!("unknown `{}`", other))),
         }
     }
     let now_v = now.unwrap_or_else(|| {
-        SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0)
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_millis() as u64)
+            .unwrap_or(0)
     });
     Ok((
         mf.ok_or_else(|| SignError::Usage("verify-manifest: missing --manifest".into()))?,

@@ -26,16 +26,38 @@ pub enum SignError {
     SeedKeygenUnsupported(&'static str),
     PqcleanFailed(&'static str),
     PubkeyDecode,
-    InvalidSeedLength { alg: &'static str, expected: usize, actual: usize },
-    InvalidPubkeyLength { alg: &'static str, expected: usize, actual: usize },
-    InvalidSignatureLength { alg: &'static str, expected: usize, actual: usize },
+    InvalidSeedLength {
+        alg: &'static str,
+        expected: usize,
+        actual: usize,
+    },
+    InvalidPubkeyLength {
+        alg: &'static str,
+        expected: usize,
+        actual: usize,
+    },
+    InvalidSignatureLength {
+        alg: &'static str,
+        expected: usize,
+        actual: usize,
+    },
 
-    DeriveFieldTooLong { field: &'static str, len: usize },
+    DeriveFieldTooLong {
+        field: &'static str,
+        len: usize,
+    },
 
     TaKeyCount(usize),
-    TaPubkeyLen { alg: &'static str, expected: usize, got: usize },
+    TaPubkeyLen {
+        alg: &'static str,
+        expected: usize,
+        got: usize,
+    },
     TaValidFromZero,
-    TaValidWindow { from: u64, until: u64 },
+    TaValidWindow {
+        from: u64,
+        until: u64,
+    },
     TaRevokedCertSerialCount(usize),
     TaRevokedNonosIdCount(usize),
     TaRevokedPublisherKeyIdCount(usize),
@@ -43,12 +65,23 @@ pub enum SignError {
     CertNamespaceGlobCount(usize),
     CertNamespaceGlobLen(usize),
     CertMetadataLen(usize),
-    CertValidWindow { from: u64, until: u64 },
+    CertValidWindow {
+        from: u64,
+        until: u64,
+    },
     CertPublisherKeyCount(usize),
-    CertPubkeyLen { alg: &'static str, expected: usize, got: usize },
+    CertPubkeyLen {
+        alg: &'static str,
+        expected: usize,
+        got: usize,
+    },
     CertKeysPerAlg(&'static str),
     CertTrustAnchorSigCount(usize),
-    CertSigLen { alg: &'static str, expected: usize, got: usize },
+    CertSigLen {
+        alg: &'static str,
+        expected: usize,
+        got: usize,
+    },
 
     ManifestNamespaceLen(usize),
     ManifestTargetTripleLen(usize),
@@ -57,7 +90,11 @@ pub enum SignError {
     ManifestEndpointNameLen(usize),
     ManifestDuplicateEndpoint(String),
     ManifestPublisherSigCount(usize),
-    ManifestSigLen { alg: &'static str, expected: usize, got: usize },
+    ManifestSigLen {
+        alg: &'static str,
+        expected: usize,
+        got: usize,
+    },
 
     KeyFileShape(String),
     SeedSourceMissing(String),

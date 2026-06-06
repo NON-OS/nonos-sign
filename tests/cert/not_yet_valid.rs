@@ -29,6 +29,16 @@ fn cert_not_yet_valid() {
     let cert_bytes = sign_cert(cert_input(&b), &b);
     let dpolicy = decode_trust_anchor_policy(&policy_bytes).unwrap();
     let dcert = decode_cert(&cert_bytes).unwrap();
-    let r = verify_cert(&dcert, &cert_bytes, &dpolicy, REQUIRED_ALGS, Some(VALID_FROM - 1));
-    assert!(matches!(r, Err(SignError::VerifyNotYetValid)), "got {:?}", r);
+    let r = verify_cert(
+        &dcert,
+        &cert_bytes,
+        &dpolicy,
+        REQUIRED_ALGS,
+        Some(VALID_FROM - 1),
+    );
+    assert!(
+        matches!(r, Err(SignError::VerifyNotYetValid)),
+        "got {:?}",
+        r
+    );
 }

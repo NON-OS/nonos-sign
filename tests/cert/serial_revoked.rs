@@ -33,5 +33,9 @@ fn cert_serial_revoked() {
     let dpolicy = decode_trust_anchor_policy(&policy_bytes).unwrap();
     let dcert = decode_cert(&cert_bytes).unwrap();
     let r = verify_cert(&dcert, &cert_bytes, &dpolicy, REQUIRED_ALGS, Some(NOW_MS));
-    assert!(matches!(r, Err(SignError::VerifyCertRevoked)), "got {:?}", r);
+    assert!(
+        matches!(r, Err(SignError::VerifyCertRevoked)),
+        "got {:?}",
+        r
+    );
 }

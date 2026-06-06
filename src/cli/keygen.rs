@@ -47,17 +47,24 @@ fn parse_args(args: &[String]) -> Result<(AlgId, PathBuf), SignError> {
     while i < args.len() {
         match args[i].as_str() {
             "--alg" => {
-                alg = Some(parse_alg(args.get(i + 1).ok_or_else(|| usage("--alg <name>"))?)?);
+                alg = Some(parse_alg(
+                    args.get(i + 1).ok_or_else(|| usage("--alg <name>"))?,
+                )?);
                 i += 2;
             }
             "--out" => {
-                out = Some(PathBuf::from(args.get(i + 1).ok_or_else(|| usage("--out <prefix>"))?));
+                out = Some(PathBuf::from(
+                    args.get(i + 1).ok_or_else(|| usage("--out <prefix>"))?,
+                ));
                 i += 2;
             }
             other => return Err(usage(&format!("unknown arg `{}`", other))),
         }
     }
-    Ok((alg.ok_or_else(|| usage("missing --alg"))?, out.ok_or_else(|| usage("missing --out"))?))
+    Ok((
+        alg.ok_or_else(|| usage("missing --alg"))?,
+        out.ok_or_else(|| usage("missing --out"))?,
+    ))
 }
 
 fn usage(s: &str) -> SignError {

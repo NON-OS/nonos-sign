@@ -126,8 +126,15 @@ fn on_disk_artifacts_verify_against_baked_policy() {
 
         let manifest = decode_manifest(&manifest_bytes)
             .unwrap_or_else(|e| panic!("{}: manifest decode failed: {:?}", a.name, e));
-        verify_manifest(&manifest, &manifest_bytes, &cert, &cert_bytes, &policy, REQUIRED_ALGS)
-            .unwrap_or_else(|e| panic!("{}: manifest verify failed: {:?}", a.name, e));
+        verify_manifest(
+            &manifest,
+            &manifest_bytes,
+            &cert,
+            &cert_bytes,
+            &policy,
+            REQUIRED_ALGS,
+        )
+        .unwrap_or_else(|e| panic!("{}: manifest verify failed: {:?}", a.name, e));
 
         let elf_bytes = read(a.elf_path);
         let computed = *blake3::hash(&elf_bytes).as_bytes();

@@ -32,7 +32,11 @@ pub fn verify_manifest(
     if cert_id != manifest.nonos_id_cert_id {
         return Err(SignError::VerifyNonosIdCertIdMismatch);
     }
-    if !cert.namespace_globs.iter().any(|g| glob_match(g, &manifest.namespace)) {
+    if !cert
+        .namespace_globs
+        .iter()
+        .any(|g| glob_match(g, &manifest.namespace))
+    {
         return Err(SignError::VerifyNamespaceOutsideCert);
     }
     let used = manifest.required_caps | manifest.optional_caps;
@@ -54,8 +58,16 @@ fn verify_alg(
     policy: &DecodedTaPolicy,
 ) -> Result<(), SignError> {
     let mut last_err = SignError::VerifyPublisherPolicy;
-    for sig in manifest.publisher_signatures.iter().filter(|s| s.alg == alg) {
-        if policy.revoked_publisher_key_ids.iter().any(|k| k == &sig.key_id) {
+    for sig in manifest
+        .publisher_signatures
+        .iter()
+        .filter(|s| s.alg == alg)
+    {
+        if policy
+            .revoked_publisher_key_ids
+            .iter()
+            .any(|k| k == &sig.key_id)
+        {
             last_err = SignError::VerifyPublisherKeyRevoked;
             continue;
         }

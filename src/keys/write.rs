@@ -38,7 +38,12 @@ pub fn write_pub(path: &Path, alg: AlgId, bytes: &[u8]) -> Result<(), SignError>
     Ok(())
 }
 
-pub fn write_keypair(prefix: &Path, alg: AlgId, seed: &[u8], pubkey: &[u8]) -> Result<(), SignError> {
+pub fn write_keypair(
+    prefix: &Path,
+    alg: AlgId,
+    seed: &[u8],
+    pubkey: &[u8],
+) -> Result<(), SignError> {
     let base = prefix.as_os_str().to_string_lossy().into_owned();
     write_seed(&PathBuf::from(format!("{}.seed", base)), alg, seed)?;
     write_pub(&PathBuf::from(format!("{}.pub", base)), alg, pubkey)?;

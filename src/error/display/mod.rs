@@ -29,14 +29,30 @@ use super::variants::SignError;
 
 impl fmt::Display for SignError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if let Some(r) = io::try_fmt(self, f) { return r; }
-        if let Some(r) = alg::try_fmt(self, f) { return r; }
-        if let Some(r) = derive::try_fmt(self, f) { return r; }
-        if let Some(r) = encode_ta::try_fmt(self, f) { return r; }
-        if let Some(r) = encode_cert::try_fmt(self, f) { return r; }
-        if let Some(r) = encode_manifest::try_fmt(self, f) { return r; }
-        if let Some(r) = keys::try_fmt(self, f) { return r; }
-        if let Some(r) = verify::try_fmt(self, f) { return r; }
+        if let Some(r) = io::try_fmt(self, f) {
+            return r;
+        }
+        if let Some(r) = alg::try_fmt(self, f) {
+            return r;
+        }
+        if let Some(r) = derive::try_fmt(self, f) {
+            return r;
+        }
+        if let Some(r) = encode_ta::try_fmt(self, f) {
+            return r;
+        }
+        if let Some(r) = encode_cert::try_fmt(self, f) {
+            return r;
+        }
+        if let Some(r) = encode_manifest::try_fmt(self, f) {
+            return r;
+        }
+        if let Some(r) = keys::try_fmt(self, f) {
+            return r;
+        }
+        if let Some(r) = verify::try_fmt(self, f) {
+            return r;
+        }
         write!(f, "{self:?}")
     }
 }
