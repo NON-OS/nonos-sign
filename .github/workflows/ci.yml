@@ -1,0 +1,34 @@
+name: ci
+
+# Production gate for a host Rust crate: formatting, lints (deny warnings),
+# build, and the self-contained unit + fixture tests.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: fmt + clippy + test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain components
+        run: rustup component add clippy rustfmt
+      - name: rustfmt
+        run: cargo fmt --all -- --check
+      - name: clippy (deny warnings)
+        run: cargo clippy --all-targets -- -D warnings
+      - name: build
+        run: cargo build --all-targets --locked
+      - name: unit tests
+        run: cargo test --lib --locked
