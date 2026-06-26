@@ -21,7 +21,6 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
   CARGO_INCREMENTAL: "0"
-  RUSTFLAGS: -D warnings
 
 jobs:
   check:
@@ -38,13 +37,16 @@ jobs:
           git clone --depth 1 --filter=blob:none --sparse \
             https://github.com/NON-OS/nonos-micro-kernel.git "$tmp"
           git -C "$tmp" sparse-checkout set third_party/pqclean
-          test -d "$tmp/third_party/pqclean" \
-            || { echo "::error::pqclean not found in kernel tree"; exit 1; }
+          test -d "$tmp/third_party/pqclean/crypto_sign/ml-dsa-65/clean" \
+            || { echo "::error::pqclean ml-dsa-65 sources not found in kernel tree"; exit 1; }
           mkdir -p "${GITHUB_WORKSPACE}/../third_party"
           cp -r "$tmp/third_party/pqclean" "${GITHUB_WORKSPACE}/../third_party/pqclean"
 
-      - name: Install pinned toolchain
-        run: rustup show
+      - name: Install pinned toolchain (1.88.0 + rustfmt + clippy)
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.88.0"
+          components: rustfmt, clippy
 
       - name: Cache cargo build
         uses: Swatinem/rust-cache@v2
@@ -52,7 +54,7 @@ jobs:
       - name: rustfmt
         run: cargo fmt --all -- --check
 
-      - name: clippy (deny warnings)
+      - name: clippy (deny warnings on our code)
         run: cargo clippy --all-targets --locked -- -D warnings
 
       - name: build
