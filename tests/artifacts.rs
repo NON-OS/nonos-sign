@@ -100,6 +100,17 @@ fn hex_lower(bytes: &[u8]) -> String {
 
 #[test]
 fn on_disk_artifacts_verify_against_baked_policy() {
+    // This is a kernel-integration test: it verifies the trust policy, capsule
+    // certificates and manifests that the kernel build generates under
+    // nonos-data/trust, plus the on-disk capsule ELFs. Those artifacts only
+    // exist when nonos-sign is checked out inside the kernel tree, so when they
+    // are absent (a standalone checkout, e.g. nonos-sign CI) the test skips
+    // rather than failing.
+    if !std::path::Path::new(POLICY_PATH).exists() {
+        eprintln!("skipping on_disk_artifacts: {POLICY_PATH} not present (kernel tree only)");
+        return;
+    }
+
     let policy_bytes = read(POLICY_PATH);
     let policy =
         decode_trust_anchor_policy(&policy_bytes).expect("baked trust-anchor policy must decode");
