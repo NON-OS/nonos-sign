@@ -31,6 +31,12 @@ path = "tests/artifacts.rs"
 name = "release"
 path = "tests/release.rs"
 
+# uninlined_format_args is a purely stylistic lint whose default level has
+# moved between clippy versions, so pin it here to keep CI deterministic
+# regardless of the toolchain's current default.
+[lints.clippy]
+uninlined_format_args = "allow"
+
 [dependencies]
 ed25519-dalek = { version = "2.1", features = ["zeroize"] }
 rand = "0.8"
