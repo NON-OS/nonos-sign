@@ -24,6 +24,13 @@ path = "tests/host_trust.rs"
 name = "artifacts"
 path = "tests/artifacts.rs"
 
+# Exercises the release transparency feature end to end: hybrid sign,
+# log append, lookup, both-signature verify, wrong-key and unlogged
+# rejection, and Merkle root behaviour on corrupt and missing logs.
+[[test]]
+name = "release"
+path = "tests/release.rs"
+
 [dependencies]
 ed25519-dalek = { version = "2.1", features = ["zeroize"] }
 rand = "0.8"
