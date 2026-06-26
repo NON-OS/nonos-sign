@@ -41,10 +41,7 @@ pub fn run(av: &[String]) -> Result<(), SignError> {
     println!("  cert_serial            {}", dcert.cert_serial);
     println!("  trust_anchor_epoch     {}", dcert.trust_anchor_epoch);
     println!("  publisher keys         {}", dcert.publisher_keys.len());
-    println!(
-        "  trust-anchor sigs      {}",
-        dcert.trust_anchor_signatures.len()
-    );
+    println!("  trust-anchor sigs      {}", dcert.trust_anchor_signatures.len());
     Ok(())
 }
 
@@ -73,10 +70,7 @@ fn parse(av: &[String]) -> Result<(PathBuf, PathBuf, u64), SignError> {
         }
     }
     let now = now_ms.unwrap_or_else(|| {
-        SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .map(|d| d.as_millis() as u64)
-            .unwrap_or(0)
+        SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0)
     });
     Ok((
         cert.ok_or_else(|| SignError::Usage("verify-cert: missing --cert".into()))?,

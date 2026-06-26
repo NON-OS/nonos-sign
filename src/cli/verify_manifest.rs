@@ -49,10 +49,7 @@ pub fn run(av: &[String]) -> Result<(), SignError> {
     println!("  required_caps          0x{:016x}", dmf.required_caps);
     println!("  optional_caps          0x{:016x}", dmf.optional_caps);
     println!("  endpoints              {}", dmf.endpoints.len());
-    println!(
-        "  publisher signatures   {}",
-        dmf.publisher_signatures.len()
-    );
+    println!("  publisher signatures   {}", dmf.publisher_signatures.len());
     Ok(())
 }
 
@@ -83,10 +80,7 @@ fn parse(av: &[String]) -> Result<(PathBuf, PathBuf, PathBuf, u64), SignError> {
         }
     }
     let now_v = now.unwrap_or_else(|| {
-        SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .map(|d| d.as_millis() as u64)
-            .unwrap_or(0)
+        SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0)
     });
     Ok((
         mf.ok_or_else(|| SignError::Usage("verify-manifest: missing --manifest".into()))?,

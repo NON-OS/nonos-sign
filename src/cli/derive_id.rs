@@ -32,26 +32,15 @@ fn parse_args(args: &[String]) -> Result<(String, String, String), SignError> {
     while i < args.len() {
         match args[i].as_str() {
             "--handle" => {
-                handle = Some(
-                    args.get(i + 1)
-                        .ok_or_else(|| usage("--handle <s>"))?
-                        .clone(),
-                );
+                handle = Some(args.get(i + 1).ok_or_else(|| usage("--handle <s>"))?.clone());
                 i += 2;
             }
             "--domain" => {
-                domain = Some(
-                    args.get(i + 1)
-                        .ok_or_else(|| usage("--domain <s>"))?
-                        .clone(),
-                );
+                domain = Some(args.get(i + 1).ok_or_else(|| usage("--domain <s>"))?.clone());
                 i += 2;
             }
             "--recovery" => {
-                recovery = args
-                    .get(i + 1)
-                    .ok_or_else(|| usage("--recovery <s>"))?
-                    .clone();
+                recovery = args.get(i + 1).ok_or_else(|| usage("--recovery <s>"))?.clone();
                 i += 2;
             }
             other => return Err(usage(&format!("unknown arg `{}`", other))),

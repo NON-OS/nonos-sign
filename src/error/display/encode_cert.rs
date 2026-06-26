@@ -25,11 +25,7 @@ pub(super) fn try_fmt(e: &SignError, f: &mut fmt::Formatter<'_>) -> Option<fmt::
         CertNamespaceGlobLen(n) => write!(f, "cert namespace_glob len {} not in 1..=96", n),
         CertMetadataLen(n) => write!(f, "cert metadata len {} > 256", n),
         CertValidWindow { from, until } => {
-            write!(
-                f,
-                "cert valid window invalid: from={} until={}",
-                from, until
-            )
+            write!(f, "cert valid window invalid: from={} until={}", from, until)
         }
         CertPublisherKeyCount(n) => write!(f, "cert publisher_key_count {} not in 1..=4", n),
         CertPubkeyLen { alg, expected, got } => {

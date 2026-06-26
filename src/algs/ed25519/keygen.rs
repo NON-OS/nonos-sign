@@ -33,10 +33,7 @@ pub fn from_seed(seed: &[u8]) -> Result<KeyPair, SignError> {
     bytes.copy_from_slice(seed);
     let sk = SigningKey::from_bytes(&bytes);
     let vk = sk.verifying_key();
-    Ok(KeyPair {
-        pubkey: vk.to_bytes().to_vec(),
-        seed: bytes.to_vec(),
-    })
+    Ok(KeyPair { pubkey: vk.to_bytes().to_vec(), seed: bytes.to_vec() })
 }
 
 pub fn random() -> Result<KeyPair, SignError> {

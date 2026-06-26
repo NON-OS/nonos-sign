@@ -29,12 +29,6 @@ fn cert_expired() {
     let cert_bytes = sign_cert(cert_input(&b), &b);
     let dpolicy = decode_trust_anchor_policy(&policy_bytes).unwrap();
     let dcert = decode_cert(&cert_bytes).unwrap();
-    let r = verify_cert(
-        &dcert,
-        &cert_bytes,
-        &dpolicy,
-        REQUIRED_ALGS,
-        Some(VALID_UNTIL),
-    );
+    let r = verify_cert(&dcert, &cert_bytes, &dpolicy, REQUIRED_ALGS, Some(VALID_UNTIL));
     assert!(matches!(r, Err(SignError::VerifyExpired)), "got {:?}", r);
 }

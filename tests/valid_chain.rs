@@ -36,13 +36,5 @@ fn full_chain_verifies_end_to_end() {
     let dcert = decode_cert(&cert_bytes).unwrap();
     verify_cert(&dcert, &cert_bytes, &dpolicy, REQUIRED_ALGS, Some(NOW_MS)).unwrap();
     let dmf = decode_manifest(&manifest_bytes).unwrap();
-    verify_manifest(
-        &dmf,
-        &manifest_bytes,
-        &dcert,
-        &cert_bytes,
-        &dpolicy,
-        REQUIRED_ALGS,
-    )
-    .unwrap();
+    verify_manifest(&dmf, &manifest_bytes, &dcert, &cert_bytes, &dpolicy, REQUIRED_ALGS).unwrap();
 }

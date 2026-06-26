@@ -25,11 +25,7 @@ pub fn manifest_input(b: &Bundle, cert_id: [u8; 32]) -> CapsuleManifestInputs {
     CapsuleManifestInputs {
         nonos_id_cert_id: cert_id,
         namespace: "alice.demo".into(),
-        version: VersionInput {
-            major: 1,
-            minor: 0,
-            patch: 0,
-        },
+        version: VersionInput { major: 1, minor: 0, patch: 0 },
         target_triple: "x86_64-nonos".into(),
         payload_hash: b.payload_hash,
         required_caps: 0x01,

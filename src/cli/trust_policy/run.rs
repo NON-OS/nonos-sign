@@ -54,10 +54,6 @@ pub fn run(args: &[String]) -> Result<(), SignError> {
     };
     let bytes = encode(&input)?;
     fs::write(&a.out, &bytes)?;
-    println!(
-        "wrote trust-anchor policy {} ({} bytes)",
-        a.out.display(),
-        bytes.len()
-    );
+    println!("wrote trust-anchor policy {} ({} bytes)", a.out.display(), bytes.len());
     Ok(())
 }

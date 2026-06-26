@@ -41,11 +41,7 @@ pub(super) fn inputs(
     Ok(CapsuleManifestInputs {
         nonos_id_cert_id: cert_id,
         namespace: a.namespace.clone(),
-        version: VersionInput {
-            major: a.version.0,
-            minor: a.version.1,
-            patch: a.version.2,
-        },
+        version: VersionInput { major: a.version.0, minor: a.version.1, patch: a.version.2 },
         target_triple: a.target.clone(),
         payload_hash,
         required_caps: a.required_caps,

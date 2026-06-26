@@ -31,8 +31,5 @@ pub fn random() -> Result<KeyPair, SignError> {
     if rc != 0 {
         return Err(SignError::PqcleanFailed("mldsa65 keypair"));
     }
-    Ok(KeyPair {
-        pubkey: pk,
-        seed: sk,
-    })
+    Ok(KeyPair { pubkey: pk, seed: sk })
 }

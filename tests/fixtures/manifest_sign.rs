@@ -27,16 +27,8 @@ fn sigs_both(body: &[u8], b: &Bundle) -> Vec<PublisherSignatureInput> {
     let sig_ed = sign_with(AlgId::Ed25519, &b.pub_seed_ed, body).unwrap();
     let sig_dl = sign_with(AlgId::MlDsa65, &b.pub_seed_dl, body).unwrap();
     vec![
-        PublisherSignatureInput {
-            alg: AlgId::Ed25519,
-            key_id: b.pub_key_id_ed,
-            sig: sig_ed,
-        },
-        PublisherSignatureInput {
-            alg: AlgId::MlDsa65,
-            key_id: b.pub_key_id_dl,
-            sig: sig_dl,
-        },
+        PublisherSignatureInput { alg: AlgId::Ed25519, key_id: b.pub_key_id_ed, sig: sig_ed },
+        PublisherSignatureInput { alg: AlgId::MlDsa65, key_id: b.pub_key_id_dl, sig: sig_dl },
     ]
 }
 
@@ -49,11 +41,8 @@ pub fn sign_manifest_full(input: CapsuleManifestInputs, b: &Bundle) -> Vec<u8> {
 pub fn sign_manifest_only_ed(input: CapsuleManifestInputs, b: &Bundle) -> Vec<u8> {
     let body = encode_manifest_body(&input).unwrap();
     let sig_ed = sign_with(AlgId::Ed25519, &b.pub_seed_ed, &body).unwrap();
-    let sigs = vec![PublisherSignatureInput {
-        alg: AlgId::Ed25519,
-        key_id: b.pub_key_id_ed,
-        sig: sig_ed,
-    }];
+    let sigs =
+        vec![PublisherSignatureInput { alg: AlgId::Ed25519, key_id: b.pub_key_id_ed, sig: sig_ed }];
     assemble_manifest(&body, &sigs).unwrap()
 }
 

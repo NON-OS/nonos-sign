@@ -45,10 +45,7 @@ fn parse(
     let alg = AlgId::from_u8(raw[8])?;
     let len = u16::from_be_bytes([raw[9], raw[10]]) as usize;
     if raw.len() != 11 + len {
-        return Err(SignError::KeyFileShape(format!(
-            "{} length mismatch",
-            label
-        )));
+        return Err(SignError::KeyFileShape(format!("{} length mismatch", label)));
     }
     let want = expected(alg);
     if len != want {
@@ -60,8 +57,5 @@ fn parse(
             want
         )));
     }
-    Ok(AlgKeyMaterial {
-        alg,
-        bytes: raw[11..].to_vec(),
-    })
+    Ok(AlgKeyMaterial { alg, bytes: raw[11..].to_vec() })
 }

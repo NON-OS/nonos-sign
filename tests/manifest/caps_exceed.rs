@@ -40,17 +40,6 @@ fn manifest_caps_exceed_ceiling() {
     let dpolicy = decode_trust_anchor_policy(&policy_bytes).unwrap();
     let dcert = decode_cert(&cert_bytes).unwrap();
     let dmf = decode_manifest(&manifest_bytes).unwrap();
-    let r = verify_manifest(
-        &dmf,
-        &manifest_bytes,
-        &dcert,
-        &cert_bytes,
-        &dpolicy,
-        REQUIRED_ALGS,
-    );
-    assert!(
-        matches!(r, Err(SignError::VerifyCapsExceedCeiling)),
-        "got {:?}",
-        r
-    );
+    let r = verify_manifest(&dmf, &manifest_bytes, &dcert, &cert_bytes, &dpolicy, REQUIRED_ALGS);
+    assert!(matches!(r, Err(SignError::VerifyCapsExceedCeiling)), "got {:?}", r);
 }

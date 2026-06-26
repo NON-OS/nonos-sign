@@ -100,9 +100,7 @@ pub(super) fn parse(av: &[String]) -> Result<Args, SignError> {
     }
     have.7 = !a.ns_globs.is_empty() && !a.pub_keys.is_empty() && !a.ta_seeds.is_empty();
     if !(have.0 && have.1 && have.2 && have.3 && have.4 && have.5 && have.6 && have.7) {
-        return Err(SignError::Usage(
-            "sign-id-cert: missing required flag (see --help)".into(),
-        ));
+        return Err(SignError::Usage("sign-id-cert: missing required flag (see --help)".into()));
     }
     require_hybrid_alg_set("sign-id-cert --pub-key", &a.pub_keys)?;
     require_hybrid_alg_set("sign-id-cert --ta-seed", &a.ta_seeds)?;

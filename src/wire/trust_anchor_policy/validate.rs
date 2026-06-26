@@ -30,19 +30,13 @@ pub(super) fn check(input: &TrustAnchorPolicyInput) -> Result<(), SignError> {
         check_key(k)?;
     }
     if input.revoked_cert_serials.len() > MAX_REVOKED_CERT_SERIALS {
-        return Err(SignError::TaRevokedCertSerialCount(
-            input.revoked_cert_serials.len(),
-        ));
+        return Err(SignError::TaRevokedCertSerialCount(input.revoked_cert_serials.len()));
     }
     if input.revoked_nonos_ids.len() > MAX_REVOKED_NONOS_IDS {
-        return Err(SignError::TaRevokedNonosIdCount(
-            input.revoked_nonos_ids.len(),
-        ));
+        return Err(SignError::TaRevokedNonosIdCount(input.revoked_nonos_ids.len()));
     }
     if input.revoked_publisher_key_ids.len() > MAX_REVOKED_PUBLISHER_KEY_IDS {
-        return Err(SignError::TaRevokedPublisherKeyIdCount(
-            input.revoked_publisher_key_ids.len(),
-        ));
+        return Err(SignError::TaRevokedPublisherKeyIdCount(input.revoked_publisher_key_ids.len()));
     }
     Ok(())
 }
@@ -59,10 +53,7 @@ fn check_key(k: &TrustAnchorKeyInput) -> Result<(), SignError> {
         return Err(SignError::TaValidFromZero);
     }
     if k.valid_until_ms != 0 && k.valid_until_ms <= k.valid_from_ms {
-        return Err(SignError::TaValidWindow {
-            from: k.valid_from_ms,
-            until: k.valid_until_ms,
-        });
+        return Err(SignError::TaValidWindow { from: k.valid_from_ms, until: k.valid_until_ms });
     }
     Ok(())
 }

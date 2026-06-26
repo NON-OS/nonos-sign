@@ -26,38 +26,14 @@ pub(super) fn try_fmt(e: &SignError, f: &mut fmt::Formatter<'_>) -> Option<fmt::
         SeedKeygenUnsupported(a) => write!(f, "seed-driven keygen not supported for {}", a),
         PqcleanFailed(s) => write!(f, "pqclean failed: {}", s),
         PubkeyDecode => write!(f, "pubkey decode failed"),
-        InvalidSeedLength {
-            alg,
-            expected,
-            actual,
-        } => {
-            write!(
-                f,
-                "invalid {} seed length {} (expected {})",
-                alg, actual, expected
-            )
+        InvalidSeedLength { alg, expected, actual } => {
+            write!(f, "invalid {} seed length {} (expected {})", alg, actual, expected)
         }
-        InvalidPubkeyLength {
-            alg,
-            expected,
-            actual,
-        } => {
-            write!(
-                f,
-                "invalid {} pubkey length {} (expected {})",
-                alg, actual, expected
-            )
+        InvalidPubkeyLength { alg, expected, actual } => {
+            write!(f, "invalid {} pubkey length {} (expected {})", alg, actual, expected)
         }
-        InvalidSignatureLength {
-            alg,
-            expected,
-            actual,
-        } => {
-            write!(
-                f,
-                "invalid {} signature length {} (expected {})",
-                alg, actual, expected
-            )
+        InvalidSignatureLength { alg, expected, actual } => {
+            write!(f, "invalid {} signature length {} (expected {})", alg, actual, expected)
         }
         _ => return None,
     })

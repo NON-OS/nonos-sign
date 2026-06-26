@@ -23,9 +23,7 @@ use crate::wire::constants::SCHEMA_NONOS_ID_CERT;
 pub fn decode_cert(bytes: &[u8]) -> Result<DecodedCert, SignError> {
     let mut c = Cursor::new(bytes);
     if c.u16_be()? != SCHEMA_NONOS_ID_CERT {
-        return Err(SignError::KeyFileShape(
-            "cert schema_version mismatch".into(),
-        ));
+        return Err(SignError::KeyFileShape("cert schema_version mismatch".into()));
     }
     let cert_serial = c.u64_be()?;
     let nonos_id = c.array::<32>()?;
@@ -52,11 +50,7 @@ pub fn decode_cert(bytes: &[u8]) -> Result<DecodedCert, SignError> {
         let key_id = c.array::<16>()?;
         let plen = c.u16_be()? as usize;
         let pubkey = c.take(plen)?.to_vec();
-        publisher_keys.push(DecodedPubKey {
-            alg,
-            key_id,
-            pubkey,
-        });
+        publisher_keys.push(DecodedPubKey { alg, key_id, pubkey });
     }
     let signed_region_len = c.pos;
     let sig_count = c.u8()? as usize;

@@ -40,9 +40,7 @@ pub(super) fn parse(args: &[String]) -> Result<Args, SignError> {
         let need = |k: &str| SignError::Usage(format!("mk-trust-policy: {}", k));
         match args[i].as_str() {
             "--epoch" => {
-                epoch = Some(parse_u64(
-                    args.get(i + 1).ok_or_else(|| need("--epoch <n>"))?,
-                )?);
+                epoch = Some(parse_u64(args.get(i + 1).ok_or_else(|| need("--epoch <n>"))?)?);
                 i += 2;
             }
             "--ta-pub" => {
@@ -52,30 +50,18 @@ pub(super) fn parse(args: &[String]) -> Result<Args, SignError> {
                 i += 2;
             }
             "--valid-from-ms" => {
-                vf = Some(parse_u64(
-                    args.get(i + 1).ok_or_else(|| need("--valid-from-ms <n>"))?,
-                )?);
+                vf = Some(parse_u64(args.get(i + 1).ok_or_else(|| need("--valid-from-ms <n>"))?)?);
                 i += 2;
             }
             "--valid-until-ms" => {
-                vu = parse_u64(
-                    args.get(i + 1)
-                        .ok_or_else(|| need("--valid-until-ms <n>"))?,
-                )?;
+                vu = parse_u64(args.get(i + 1).ok_or_else(|| need("--valid-until-ms <n>"))?)?;
                 i += 2;
             }
             "--out" => {
-                out = Some(PathBuf::from(
-                    args.get(i + 1).ok_or_else(|| need("--out <path>"))?,
-                ));
+                out = Some(PathBuf::from(args.get(i + 1).ok_or_else(|| need("--out <path>"))?));
                 i += 2;
             }
-            other => {
-                return Err(SignError::Usage(format!(
-                    "mk-trust-policy: unknown `{}`",
-                    other
-                )))
-            }
+            other => return Err(SignError::Usage(format!("mk-trust-policy: unknown `{}`", other))),
         }
     }
     Ok(Args {

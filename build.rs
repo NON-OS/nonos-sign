@@ -29,11 +29,8 @@ fn main() {
     }
 
     let pattern = mldsa.join("*.c").to_string_lossy().to_string();
-    let mut files: Vec<PathBuf> = glob::glob(&pattern)
-        .expect("glob")
-        .filter_map(Result::ok)
-        .filter(|p| p.exists())
-        .collect();
+    let mut files: Vec<PathBuf> =
+        glob::glob(&pattern).expect("glob").filter_map(Result::ok).filter(|p| p.exists()).collect();
     let fips = common.join("fips202.c");
     if !fips.exists() {
         panic!("missing pqclean common/fips202.c at {}", fips.display());

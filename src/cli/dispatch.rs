@@ -41,10 +41,6 @@ pub fn dispatch(argv: &[String]) -> Result<(), SignError> {
             println!("{}", usage::TOP);
             Ok(())
         }
-        other => Err(SignError::Usage(format!(
-            "unknown subcommand `{}`\n\n{}",
-            other,
-            usage::TOP
-        ))),
+        other => Err(SignError::Usage(format!("unknown subcommand `{}`\n\n{}", other, usage::TOP))),
     }
 }

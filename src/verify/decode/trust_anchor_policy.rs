@@ -23,9 +23,7 @@ use crate::wire::constants::SCHEMA_TRUST_ANCHOR_POLICY;
 pub fn decode_trust_anchor_policy(bytes: &[u8]) -> Result<DecodedTaPolicy, SignError> {
     let mut c = Cursor::new(bytes);
     if c.u16_be()? != SCHEMA_TRUST_ANCHOR_POLICY {
-        return Err(SignError::KeyFileShape(
-            "ta-policy schema_version mismatch".into(),
-        ));
+        return Err(SignError::KeyFileShape("ta-policy schema_version mismatch".into()));
     }
     let epoch = c.u64_be()?;
     let key_count = c.u8()? as usize;
@@ -36,12 +34,7 @@ pub fn decode_trust_anchor_policy(bytes: &[u8]) -> Result<DecodedTaPolicy, SignE
         let pubkey = c.take(plen)?.to_vec();
         let valid_from_ms = c.u64_be()?;
         let valid_until_ms = c.u64_be()?;
-        keys.push(DecodedTaKey {
-            alg,
-            pubkey,
-            valid_from_ms,
-            valid_until_ms,
-        });
+        keys.push(DecodedTaKey { alg, pubkey, valid_from_ms, valid_until_ms });
     }
     let serial_count = c.u16_be()? as usize;
     let mut revoked_cert_serials: Vec<u64> = Vec::with_capacity(serial_count);

@@ -27,14 +27,8 @@ fn sigs_both(body: &[u8], b: &Bundle) -> Vec<TrustAnchorSignatureInput> {
     let sig_ed = sign_with(AlgId::Ed25519, &b.ta_seed_ed, body).unwrap();
     let sig_dl = sign_with(AlgId::MlDsa65, &b.ta_seed_dl, body).unwrap();
     vec![
-        TrustAnchorSignatureInput {
-            alg: AlgId::Ed25519,
-            sig: sig_ed,
-        },
-        TrustAnchorSignatureInput {
-            alg: AlgId::MlDsa65,
-            sig: sig_dl,
-        },
+        TrustAnchorSignatureInput { alg: AlgId::Ed25519, sig: sig_ed },
+        TrustAnchorSignatureInput { alg: AlgId::MlDsa65, sig: sig_dl },
     ]
 }
 
@@ -47,10 +41,7 @@ pub fn sign_cert(input: NonosIdCertInputs, b: &Bundle) -> Vec<u8> {
 pub fn sign_cert_only_ed(input: NonosIdCertInputs, b: &Bundle) -> Vec<u8> {
     let body = encode_cert_body(&input).unwrap();
     let sig_ed = sign_with(AlgId::Ed25519, &b.ta_seed_ed, &body).unwrap();
-    let sigs = vec![TrustAnchorSignatureInput {
-        alg: AlgId::Ed25519,
-        sig: sig_ed,
-    }];
+    let sigs = vec![TrustAnchorSignatureInput { alg: AlgId::Ed25519, sig: sig_ed }];
     assemble_cert(&body, &sigs).unwrap()
 }
 
