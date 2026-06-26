@@ -62,6 +62,7 @@ pub fn run(args: &[String]) -> Result<(), SignError> {
         "VERIFIED release v{}: ed25519 + ml-dsa-65 both valid, present in transparency log",
         &args[3]
     );
-    println!("  transparency log root {}", hex::encode(merkle_root(&args[2])));
+    let root = merkle_root(&args[2]).map_err(SignError::Io)?;
+    println!("  transparency log root {}", hex::encode(root));
     Ok(())
 }

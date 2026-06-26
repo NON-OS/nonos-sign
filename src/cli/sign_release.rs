@@ -57,6 +57,7 @@ pub fn run(args: &[String]) -> Result<(), SignError> {
     println!("signed release v{} commit {}", &args[3], &args[4]);
     println!("  ed25519  sig {} bytes", ed_sig.len());
     println!("  ml-dsa65 sig {} bytes", pq_sig.len());
-    println!("  transparency log root {}", hex::encode(merkle_root(&args[2])));
+    let root = merkle_root(&args[2]).map_err(SignError::Io)?;
+    println!("  transparency log root {}", hex::encode(root));
     Ok(())
 }

@@ -32,11 +32,7 @@ pub fn verify_cert(
     if policy.revoked_cert_serials.contains(&cert.cert_serial) {
         return Err(SignError::VerifyCertRevoked);
     }
-    if policy
-        .revoked_nonos_ids
-        .iter()
-        .any(|id| id == &cert.nonos_id)
-    {
+    if policy.revoked_nonos_ids.iter().any(|id| id == &cert.nonos_id) {
         return Err(SignError::VerifyNonosIdRevoked);
     }
     if let Some(ts) = now_ms {
@@ -49,9 +45,16 @@ pub fn verify_cert(
     }
     let signed_region = &cert_bytes[..cert.signed_region_len];
     for alg in required_algs.iter().copied() {
-        verify_alg(alg, cert, signed_region, policy)?;
+        verify_alg(alg, cert, signed_region, policy, now_ms)?;
     }
     Ok(())
+}
+
+fn key_in_window(key: &crate::verify::decoded::DecodedTaKey, now_ms: Option<u64>) -> bool {
+    match now_ms {
+        Some(ts) => ts >= key.valid_from_ms && (key.valid_until_ms == 0 || ts < key.valid_until_ms),
+        None => true,
+    }
 }
 
 fn verify_alg(
@@ -59,6 +62,7 @@ fn verify_alg(
     cert: &DecodedCert,
     signed_region: &[u8],
     policy: &DecodedTaPolicy,
+    now_ms: Option<u64>,
 ) -> Result<(), SignError> {
     let sig = cert
         .trust_anchor_signatures
@@ -66,6 +70,9 @@ fn verify_alg(
         .find(|s| s.alg == alg)
         .ok_or(SignError::VerifyTrustAnchorPolicy)?;
     for key in policy.keys.iter().filter(|k| k.alg == alg) {
+        if !key_in_window(key, now_ms) {
+            continue;
+        }
         if let Ok(true) = verify_with(alg, &key.pubkey, signed_region, &sig.sig) {
             return Ok(());
         }

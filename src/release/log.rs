@@ -44,22 +44,33 @@ pub fn find_entry(path: &str, manifest_hex: &str) -> Option<(Vec<u8>, Vec<u8>)> 
     None
 }
 
-pub fn merkle_root(path: &str) -> [u8; 32] {
-    let content = fs::read_to_string(path).unwrap_or_default();
-    let mut level: Vec<[u8; 32]> = content
-        .lines()
-        .filter_map(|l| {
-            let mut p = l.split_whitespace();
-            match (p.next(), p.next(), p.next()) {
-                (Some(m), Some(e), Some(q)) => {
-                    Some(leaf(&hex::decode(m).ok()?, &hex::decode(e).ok()?, &hex::decode(q).ok()?))
-                }
-                _ => None,
-            }
-        })
-        .collect();
+fn malformed(detail: &str) -> std::io::Error {
+    std::io::Error::new(std::io::ErrorKind::InvalidData, detail)
+}
+
+pub fn merkle_root(path: &str) -> std::io::Result<[u8; 32]> {
+    let content = match fs::read_to_string(path) {
+        Ok(c) => c,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok([0u8; 32]),
+        Err(e) => return Err(e),
+    };
+    let mut level: Vec<[u8; 32]> = Vec::new();
+    for line in content.lines() {
+        if line.trim().is_empty() {
+            continue;
+        }
+        let mut p = line.split_whitespace();
+        let (m, e, q) = match (p.next(), p.next(), p.next()) {
+            (Some(m), Some(e), Some(q)) => (m, e, q),
+            _ => return Err(malformed("malformed transparency log line")),
+        };
+        let md = hex::decode(m).map_err(|_| malformed("bad manifest hex in log"))?;
+        let ed = hex::decode(e).map_err(|_| malformed("bad ed25519 hex in log"))?;
+        let pd = hex::decode(q).map_err(|_| malformed("bad ml-dsa hex in log"))?;
+        level.push(leaf(&md, &ed, &pd));
+    }
     if level.is_empty() {
-        return [0u8; 32];
+        return Ok([0u8; 32]);
     }
     while level.len() > 1 {
         level = level
@@ -74,5 +85,5 @@ pub fn merkle_root(path: &str) -> [u8; 32] {
             })
             .collect();
     }
-    level[0]
+    Ok(level[0])
 }

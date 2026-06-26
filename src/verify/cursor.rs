@@ -27,7 +27,7 @@ impl<'a> Cursor<'a> {
     }
 
     pub(super) fn take(&mut self, n: usize) -> Result<&'a [u8], SignError> {
-        if self.pos + n > self.buf.len() {
+        if self.pos.checked_add(n).is_none_or(|end| end > self.buf.len()) {
             return Err(SignError::KeyFileShape("unexpected eof in decode".into()));
         }
         let s = &self.buf[self.pos..self.pos + n];
