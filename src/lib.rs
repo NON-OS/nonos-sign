@@ -17,6 +17,7 @@
 pub mod algs;
 pub mod error;
 pub mod keys;
+pub mod release;
 pub mod sign;
 pub mod verify;
 pub mod wire;

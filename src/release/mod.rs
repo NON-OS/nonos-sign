@@ -14,18 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-mod derive_id;
-mod dispatch;
-mod keygen;
-mod parse;
-mod sign_id_cert;
-mod sign_manifest;
-mod sign_release;
-mod trust_policy;
-mod usage;
-mod verify_cert;
-mod verify_manifest;
-mod verify_policy;
-mod verify_release;
+mod log;
+mod manifest;
 
-pub use dispatch::dispatch;
+pub use log::{append_entry, find_entry, merkle_root};
+pub use manifest::canonical_manifest;

@@ -17,8 +17,8 @@
 use nonos_capsule_sign::error::SignError;
 
 use super::{
-    derive_id, keygen, sign_id_cert, sign_manifest, trust_policy, usage, verify_cert,
-    verify_manifest, verify_policy,
+    derive_id, keygen, sign_id_cert, sign_manifest, sign_release, trust_policy, usage, verify_cert,
+    verify_manifest, verify_policy, verify_release,
 };
 
 pub fn dispatch(argv: &[String]) -> Result<(), SignError> {
@@ -32,6 +32,8 @@ pub fn dispatch(argv: &[String]) -> Result<(), SignError> {
         "mk-trust-policy" => trust_policy::run(rest),
         "sign-id-cert" => sign_id_cert::run(rest),
         "sign-manifest" => sign_manifest::run(rest),
+        "sign-release" => sign_release::run(rest),
+        "verify-release" => verify_release::run(rest),
         "verify-policy" => verify_policy::run(rest),
         "verify-cert" => verify_cert::run(rest),
         "verify-manifest" => verify_manifest::run(rest),
