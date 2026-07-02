@@ -36,4 +36,6 @@ extern "C" {
         mlen: usize,
         pk: *const u8,
     ) -> core::ffi::c_int;
+
+    pub fn NONOS_mldsa65_deterministic_random(enabled: core::ffi::c_int);
 }

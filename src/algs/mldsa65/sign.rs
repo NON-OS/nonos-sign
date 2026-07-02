@@ -13,14 +13,18 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-
+use super::{ffi, keygen, verify};
 use crate::algs::traits::{KeyPair, Signer, Verifier};
 use crate::error::SignError;
-
-use super::{ffi, keygen, verify};
-
 pub struct MlDsa65;
-
+impl MlDsa65 {
+    pub fn sign_reproducible(seed: &[u8], msg: &[u8]) -> Result<Vec<u8>, SignError> {
+        unsafe { ffi::NONOS_mldsa65_deterministic_random(1) };
+        let out = Self::sign(seed, msg);
+        unsafe { ffi::NONOS_mldsa65_deterministic_random(0) };
+        out
+    }
+}
 impl Signer for MlDsa65 {
     fn keygen_from_seed(seed: &[u8]) -> Result<KeyPair, SignError> {
         keygen::from_seed(seed)
@@ -62,7 +66,6 @@ impl Signer for MlDsa65 {
         Ok(sig)
     }
 }
-
 impl Verifier for MlDsa65 {
     fn verify(pubkey: &[u8], msg: &[u8], sig: &[u8]) -> Result<bool, SignError> {
         verify::verify_raw(pubkey, msg, sig)
