@@ -20,7 +20,19 @@
 #include <stdint.h>
 #include <stdio.h>
 
+static int nonos_deterministic_random;
+
+void NONOS_mldsa65_deterministic_random(int enabled) {
+    nonos_deterministic_random = enabled;
+}
+
 int randombytes(uint8_t *buf, size_t n) {
+    if (nonos_deterministic_random) {
+        for (size_t i = 0; i < n; i++) {
+            buf[i] = 0;
+        }
+        return 0;
+    }
     FILE *f = fopen("/dev/urandom", "rb");
     if (!f) {
         return -1;

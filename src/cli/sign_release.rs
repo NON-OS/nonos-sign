@@ -52,7 +52,7 @@ pub fn run(args: &[String]) -> Result<(), SignError> {
         parse_u64(&args[8])?,
     );
     let ed_sig = Ed25519::sign(&ed.bytes, &manifest)?;
-    let pq_sig = MlDsa65::sign(&pq.bytes, &manifest)?;
+    let pq_sig = MlDsa65::sign_reproducible(&pq.bytes, &manifest)?;
     append_entry(&args[2], &manifest, &ed_sig, &pq_sig).map_err(SignError::Io)?;
     println!("signed release v{} commit {}", &args[3], &args[4]);
     println!("  ed25519  sig {} bytes", ed_sig.len());
