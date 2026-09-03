@@ -1,17 +1,22 @@
 # Wire Formats
 
 Three self-tagged binary schemas make up the trust chain. All integers
-are big endian. Every format is a signed region followed by a
-signature trailer: the signer covers exactly the region, byte for
-byte, and the count byte that opens the trailer is the first unsigned
-byte. Length-prefixed strings carry a one-byte length; nothing is
+are big endian. The certificate and manifest are a signed region
+followed by a signature trailer: the signer covers exactly the
+region, byte for byte, and the count byte that opens the trailer is
+the first unsigned byte. The policy stands alone, unsigned, for the
+reason given below. Length-prefixed strings carry a one-byte length; nothing is
 null-terminated; decoders refuse anything that does not consume
 exactly its declared bytes.
 
 ## Schema 1 — trust-anchor policy
 
-The root of the chain: the anchor's keys and the revocation state,
-self-signed by the anchor keys it carries.
+The root of the chain: the anchor's keys and the revocation state.
+It carries no signature, deliberately. A signature on the root would
+only chain to itself; the policy's integrity comes from being baked,
+into the kernel image, the bootloader's verification, and the
+keystore ledger, so replacing it means replacing artifacts whose
+hashes are published and independently rebuilt.
 
 | Field | Size | Notes |
 |-------|------|-------|
@@ -22,7 +27,7 @@ self-signed by the anchor keys it carries.
 | revoked_cert_serial_count | u16 | at most 256, then u64 serials |
 | revoked_nonos_id_count | u8 | at most 64, then 32-byte ids |
 | revoked_publisher_key_id_count | u16 | at most 256, then 16-byte key ids |
-| signature trailer | | see below |
+| flags | u32 | reserved, zero today |
 
 ## Schema 2 — NONOS-ID certificate
 
