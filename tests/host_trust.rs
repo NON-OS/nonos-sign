@@ -17,4 +17,5 @@
 mod cert;
 mod fixtures;
 mod manifest;
+mod payload_binding;
 mod valid_chain;
